@@ -1,2 +1,2 @@
-# kernel
-Multiboot2-compliant Intel 64 Microkernel
+# Kernel
+A Multiboot2-compliant Intel 64 Microkernel
