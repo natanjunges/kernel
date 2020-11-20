@@ -26,6 +26,7 @@ limitations under the License. */
 #define CPUID_EXTENDED_FEATURES 0x80000001
 #define CPUID_LONG_MODE (1 << 29)
 
+#define PAGING_PAGE_SIZE (1 << 7)
 #define PAGING_READ_WRITE (1 << 1)
 #define PAGING_PRESENT (1 << 0)
 

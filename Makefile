@@ -20,7 +20,6 @@ PWD = $(shell pwd)
 INC ?= $(PWD)/inc
 BUILD ?= $(PWD)/build
 SUBMAKES = boot
-SUBDIRS = $(patsubst %, $(BUILD)/%, $(SUBMAKES))
 
 linker_ld := $(PWD)/src/linker.ld
 grub_cfg := $(PWD)/src/boot/grub.cfg
@@ -45,7 +44,7 @@ kernel: $(SUBMAKES)
 $(SUBMAKES):
 	make -C $(PWD)/src/$@ all TARGET=$(TARGET) XCC=$(XCC) XLD=$(XLD) QEMU=$(QEMU) INC=$(INC) BUILD=$(BUILD)
 
-$(binary): $(linker_ld) $(SUBDIRS)
+$(binary): $(linker_ld) $(shell find $(BUILD) -name *.o)
 	$(XLD) -n -T $(linker_ld) $(shell find $(BUILD) -name *.o) -o $@
 
 $(iso): kernel $(grub_cfg)

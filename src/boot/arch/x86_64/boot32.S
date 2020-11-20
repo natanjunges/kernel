@@ -47,21 +47,6 @@ start:
     lgdt (.gdt64_pointer)
     jmp $.gdt64_code, $start64
 
-//Prints "ERROR: <%al>" at (0, 0) in EGA text video memory in white with red background
-error:
-    movw $0x4F45, (0xB8000)
-    movw $0x4F52, (0xB8002)
-    movw $0x4F52, (0xB8004)
-    movw $0x4F4F, (0xB8006)
-    movw $0x4F52, (0xB8008)
-    movw $0x4F3A, (0xB800A)
-    movw $0x4F20, (0xB800C)
-    movw $0x4F20, (0xB800E)
-    mov %al, (0xB800E)
-loop:
-    hlt
-    jmp loop
-
 check_cpuid:
     pushfl
     pop %eax
@@ -77,8 +62,8 @@ check_cpuid:
     je .no_cpuid
     ret
 .no_cpuid:
-    mov $'0', %al
-    jmp error
+    hlt
+    jmp .no_cpuid
 
 check_long_mode:
     mov $CPUID_EXTENDED_FUNCTIONS, %eax
@@ -91,31 +76,73 @@ check_long_mode:
     jz .no_long_mode
     ret
 .no_long_mode:
-    mov $'1', %al
-    jmp error
+    hlt
+    jmp .no_long_mode
 
-/* Identity maps the first 2 MiB of memory */
+/* Identity maps the first 4 GiB of memory */
 set_up_page_tables:
     mov $p3_table, %eax
     or $(PAGING_READ_WRITE | PAGING_PRESENT), %eax
     mov %eax, (p4_table)
-    mov $p2_table, %eax
+    mov $p2_1_table, %eax
     or $(PAGING_READ_WRITE | PAGING_PRESENT), %eax
     mov %eax, (p3_table)
-    mov $p1_table, %eax
+    mov $p2_2_table, %eax
     or $(PAGING_READ_WRITE | PAGING_PRESENT), %eax
-    mov %eax, (p2_table)
+    mov %eax, (p3_table + 8)
+    mov $p2_3_table, %eax
+    or $(PAGING_READ_WRITE | PAGING_PRESENT), %eax
+    mov %eax, (p3_table + 16)
+    mov $p2_4_table, %eax
+    or $(PAGING_READ_WRITE | PAGING_PRESENT), %eax
+    mov %eax, (p3_table + 24)
     mov $0, %ecx
-.map_p1_table:
-    //4 KiB pages
-    mov $0x1000, %eax
+.map_p2_1_table:
+    //2 MiB pages
+    mov $0x200000, %eax
     mul %ecx
-    or $(PAGING_READ_WRITE | PAGING_PRESENT), %eax
-    mov $p1_table, %ebx
+    or $(PAGING_READ_WRITE | PAGING_PRESENT | PAGING_PAGE_SIZE), %eax
+    mov $p2_1_table, %ebx
     mov %eax, (%ebx, %ecx, 8)
     inc %ecx
     cmp $512, %ecx
-    jne .map_p1_table
+    jne .map_p2_1_table
+    mov $0, %ecx
+.map_p2_2_table:
+    //2 MiB pages
+    mov $0x200000, %eax
+    mul %ecx
+    add $0x40000000, %eax
+    or $(PAGING_READ_WRITE | PAGING_PRESENT | PAGING_PAGE_SIZE), %eax
+    mov $p2_2_table, %ebx
+    mov %eax, (%ebx, %ecx, 8)
+    inc %ecx
+    cmp $512, %ecx
+    jne .map_p2_2_table
+    mov $0, %ecx
+.map_p2_3_table:
+    //2 MiB pages
+    mov $0x200000, %eax
+    mul %ecx
+    add $0x80000000, %eax
+    or $(PAGING_READ_WRITE | PAGING_PRESENT | PAGING_PAGE_SIZE), %eax
+    mov $p2_3_table, %ebx
+    mov %eax, (%ebx, %ecx, 8)
+    inc %ecx
+    cmp $512, %ecx
+    jne .map_p2_3_table
+    mov $0, %ecx
+.map_p2_4_table:
+    //2 MiB pages
+    mov $0x200000, %eax
+    mul %ecx
+    add $0xC0000000, %eax
+    or $(PAGING_READ_WRITE | PAGING_PRESENT | PAGING_PAGE_SIZE), %eax
+    mov $p2_4_table, %ebx
+    mov %eax, (%ebx, %ecx, 8)
+    inc %ecx
+    cmp $512, %ecx
+    jne .map_p2_4_table
     ret
 
 load_page_tables:
@@ -153,11 +180,19 @@ p3_table:
     .space 4096
 
 .align 4096
-p2_table:
+p2_1_table:
     .space 4096
 
 .align 4096
-p1_table:
+p2_2_table:
+    .space 4096
+
+.align 4096
+p2_3_table:
+    .space 4096
+
+.align 4096
+p2_4_table:
     .space 4096
 
 .align 16

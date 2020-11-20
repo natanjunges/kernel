@@ -51,6 +51,16 @@ information_request_tag_start:
 information_request_tag_end:
 
 .align 8
+framebuffer_tag_start:
+    .word MULTIBOOT2_HEADER_TAG_TYPE_FRAMEBUFFER
+    .word MULTIBOOT2_HEADER_TAG_FLAGS_OPTIONAL
+    .long framebuffer_tag_end - framebuffer_tag_start
+    .long 0
+    .long 0
+    .long 0
+framebuffer_tag_end:
+
+.align 8
     .word MULTIBOOT2_HEADER_TAG_TYPE_END
     .word 0
     .long 8
