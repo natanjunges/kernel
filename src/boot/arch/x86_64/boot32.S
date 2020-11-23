@@ -17,7 +17,7 @@ limitations under the License. */
 
 .extern start64
 
-.global start
+.global start, stack
 
 .section .rodata
 gdt64:
@@ -62,8 +62,8 @@ check_cpuid:
     je .no_cpuid
     ret
 .no_cpuid:
-    hlt
-    jmp .no_cpuid
+    //Force reset by triple fault
+    jmp $0xFFFF, $0x0000
 
 check_long_mode:
     mov $CPUID_EXTENDED_FUNCTIONS, %eax
@@ -76,8 +76,8 @@ check_long_mode:
     jz .no_long_mode
     ret
 .no_long_mode:
-    hlt
-    jmp .no_long_mode
+    //Force reset by triple fault
+    jmp $0xFFFF, $0x0000
 
 /* Identity maps the first 4 GiB of memory */
 set_up_page_tables:

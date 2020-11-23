@@ -13,6 +13,9 @@ See the License for the specific language governing permissions and
 limitations under the License. */
 
 #include <multiboot2.h>
+#include <config.h>
+
+.extern start, efi64
 
 .section .multiboot_header
 .align 8
@@ -31,12 +34,9 @@ information_request_tag_start:
     .long MULTIBOOT2_TAG_TYPE_BOOT_LOADER_NAME
     .long MULTIBOOT2_TAG_TYPE_MODULES
     .long MULTIBOOT2_TAG_TYPE_BASIC_MEMORY_INFORMATION
-    .long MULTIBOOT2_TAG_TYPE_BIOS_BOOT_DEVICE
     .long MULTIBOOT2_TAG_TYPE_MEMORY_MAP
-    .long MULTIBOOT2_TAG_TYPE_VBE_INFO
     .long MULTIBOOT2_TAG_TYPE_FRAMEBUFFER_INFO
     .long MULTIBOOT2_TAG_TYPE_ELF_SYMBOLS
-    .long MULTIBOOT2_TAG_TYPE_APM_TABLE
     .long MULTIBOOT2_TAG_TYPE_EFI_32_BIT_SYSTEM_TABLE_POINTER
     .long MULTIBOOT2_TAG_TYPE_EFI_64_BIT_SYSTEM_TABLE_POINTER
     .long MULTIBOOT2_TAG_TYPE_SMBIOS_TABLES
@@ -44,21 +44,45 @@ information_request_tag_start:
     .long MULTIBOOT2_TAG_TYPE_ACPI_NEW_RSDP
     .long MULTIBOOT2_TAG_TYPE_NETWORKING_INFORMATION
     .long MULTIBOOT2_TAG_TYPE_EFI_MEMORY_MAP
-    .long MULTIBOOT2_TAG_TYPE_EFI_BOOT_SERVICES_NOT_TERMINATED
     .long MULTIBOOT2_TAG_TYPE_EFI_32_BIT_IMAGE_HANDLE_POINTER
     .long MULTIBOOT2_TAG_TYPE_EFI_64_BIT_IMAGE_HANDLE_POINTER
     .long MULTIBOOT2_TAG_TYPE_IMAGE_LOAD_BASE_PHYSICAL_ADDRESS
 information_request_tag_end:
 
 .align 8
+efi_i386_entry_address_tag_start:
+    .word MULTIBOOT2_HEADER_TAG_TYPE_EFI_I386_ENTRY_ADDRESS
+    .word MULTIBOOT2_HEADER_TAG_FLAGS_OPTIONAL
+    .long efi_i386_entry_address_tag_end - efi_i386_entry_address_tag_start
+    .long start
+efi_i386_entry_address_tag_end:
+
+.align 8
+efi_amd64_entry_address_tag_start:
+    .word MULTIBOOT2_HEADER_TAG_TYPE_EFI_AMD64_ENTRY_ADDRESS
+    .word MULTIBOOT2_HEADER_TAG_FLAGS_OPTIONAL
+    .long efi_amd64_entry_address_tag_end - efi_amd64_entry_address_tag_start
+    .long efi64
+efi_amd64_entry_address_tag_end:
+
+.align 8
 framebuffer_tag_start:
     .word MULTIBOOT2_HEADER_TAG_TYPE_FRAMEBUFFER
-    .word MULTIBOOT2_HEADER_TAG_FLAGS_OPTIONAL
+    .word 0
     .long framebuffer_tag_end - framebuffer_tag_start
     .long 0
     .long 0
     .long 0
 framebuffer_tag_end:
+
+#if EFI_BOOT_SERVICES
+.align 8
+efi_boot_services_tag_start:
+    .word MULTIBOOT2_HEADER_TAG_TYPE_EFI_BOOT_SERVICES
+    .word 0
+    .long efi_boot_services_tag_end - efi_boot_services_tag_start
+efi_boot_services_tag_end:
+#endif/* EFI_BOOT_SERVICES*/
 
 .align 8
     .word MULTIBOOT2_HEADER_TAG_TYPE_END

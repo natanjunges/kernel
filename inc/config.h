@@ -15,6 +15,8 @@ limitations under the License. */
 #ifndef CONFIG_H
 #define CONFIG_H
 
+#define EFI_BOOT_SERVICES 0
+
 #define STACK_SIZE 0x4000
 
 #endif/* !CONFIG_H*/

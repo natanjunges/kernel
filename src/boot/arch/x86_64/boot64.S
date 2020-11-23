@@ -12,12 +12,18 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License. */
 
-.extern main
+.extern main, stack
 
-.global start64
+.global efi64, start64
 
 .section .text
 .code64
+efi64:
+    cli
+    mov $stack, %esp
+    //Move multiboot2 special values to final locations
+    mov %eax, %edi
+    mov %ebx, %esi
 start64:
     mov $0, %ax
     mov %ax, %ss

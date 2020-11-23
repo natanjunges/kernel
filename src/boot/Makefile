@@ -29,7 +29,7 @@ c_object_files := $(patsubst $(PWD)/%.c, \
 
 all: $(assembly_object_files) $(c_object_files)
 
-$(BUILD)/boot/arch/$(TARGET)/%.o: $(PWD)/arch/$(TARGET)/%.S
+$(BUILD)/boot/arch/$(TARGET)/%.o: $(PWD)/arch/$(TARGET)/%.S $(INC)/config.h
 	mkdir -p $(shell dirname $@)
 	$(XCC) -ffreestanding -I$(INC) -c $< -o $@
 

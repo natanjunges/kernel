@@ -30,9 +30,9 @@ iso := $(BUILD)/kernel-$(TARGET).iso
 
 all: kernel
 
-iso: $(iso)
+iso: kernel $(iso)
 
-run: $(iso)
+run: kernel $(iso)
 	$(QEMU) -bios OVMF.fd -cdrom $(iso)
 
 clean:
@@ -47,7 +47,7 @@ $(SUBMAKES):
 $(binary): $(linker_ld) $(shell find $(BUILD) -name *.o)
 	$(XLD) -n -T $(linker_ld) $(shell find $(BUILD) -name *.o) -o $@
 
-$(iso): kernel $(grub_cfg)
+$(iso): $(binary) $(grub_cfg)
 	mkdir -p $(BUILD)/isofiles/boot/grub/
 	cp $(binary) $(BUILD)/isofiles/boot/kernel.elf
 	cp $(grub_cfg) $(BUILD)/isofiles/boot/grub/
