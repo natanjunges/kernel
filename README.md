@@ -8,6 +8,7 @@ A Multiboot2-compliant Intel 64 Microkernel
 * Xorriso;
 * Mtools;
 * QEMU for the desired architecture (Intel 64) (optional).
+* OVMF to run QEMU (optional).
 
 ## Building
 Check the [Wiki](https://github.com/natanjunges/kernel/wiki/Building) for further details.

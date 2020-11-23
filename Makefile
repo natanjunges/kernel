@@ -33,7 +33,7 @@ all: kernel
 iso: $(iso)
 
 run: $(iso)
-	$(QEMU) -cdrom $(iso)
+	$(QEMU) -bios OVMF.fd -cdrom $(iso)
 
 clean:
 	@rm -r $(BUILD)
