@@ -12,8 +12,10 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License. */
 
+#include <multiboot2.h>
+#include <multiboot2_mbi.h>
 #include <stdint.h>
 
-void main(uint32_t magic, uintptr_t mbi) {
-    while (1);
+void main(uint32_t magic, struct mbi_header * mbi) {
+    return;
 }
