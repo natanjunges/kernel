@@ -21,9 +21,9 @@ limitations under the License. */
 .align 8
 header_start:
     .long MULTIBOOT2_HEADER_MAGIC
-    .long MULTIBOOT2_HEADER_ARCHITECTURE_I386
+    .long MULTIBOOT2_HEADER_ARCHITECTURE
     .long header_end - header_start
-    .long -(MULTIBOOT2_HEADER_MAGIC + MULTIBOOT2_HEADER_ARCHITECTURE_I386 + (header_end - header_start))
+    .long -(MULTIBOOT2_HEADER_MAGIC + MULTIBOOT2_HEADER_ARCHITECTURE + (header_end - header_start))
 
 .align 8
 information_request_tag_start:

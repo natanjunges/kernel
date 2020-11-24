@@ -88,7 +88,7 @@ struct mbi_tag_framebuffer_info_color_info {
     uint8_t framebuffer_blue_mask_size;
 };
 
-#define FRAMEBUFFER_INFO_FRAMEBUFFER_TYPE_RGB 1
+#define FRAMEBUFFER_INFO_FRAMEBUFFER_TYPE 1
 
 struct mbi_tag_framebuffer_info {
     uint32_t type;
