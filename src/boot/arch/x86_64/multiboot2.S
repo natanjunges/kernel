@@ -49,6 +49,7 @@ information_request_tag_start:
     .long MULTIBOOT2_TAG_TYPE_IMAGE_LOAD_BASE_PHYSICAL_ADDRESS
 information_request_tag_end:
 
+#if FRAMEBUFFER
 .align 8
 framebuffer_tag_start:
     .word MULTIBOOT2_HEADER_TAG_TYPE_FRAMEBUFFER
@@ -58,6 +59,7 @@ framebuffer_tag_start:
     .long 0
     .long 0
 framebuffer_tag_end:
+#endif/* FRAMEBUFFER*/
 
 #if MODULE_ALIGNMENT
 .align 8
@@ -75,12 +77,11 @@ efi_boot_services_tag_start:
     .word 0
     .long efi_boot_services_tag_end - efi_boot_services_tag_start
 efi_boot_services_tag_end:
-#endif/* EFI_BOOT_SERVICES*/
 
 .align 8
 efi_i386_entry_address_tag_start:
     .word MULTIBOOT2_HEADER_TAG_TYPE_EFI_I386_ENTRY_ADDRESS
-    .word MULTIBOOT2_HEADER_TAG_FLAGS_OPTIONAL
+    .word 0
     .long efi_i386_entry_address_tag_end - efi_i386_entry_address_tag_start
     .long start
 efi_i386_entry_address_tag_end:
@@ -88,10 +89,11 @@ efi_i386_entry_address_tag_end:
 .align 8
 efi_amd64_entry_address_tag_start:
     .word MULTIBOOT2_HEADER_TAG_TYPE_EFI_AMD64_ENTRY_ADDRESS
-    .word MULTIBOOT2_HEADER_TAG_FLAGS_OPTIONAL
+    .word 0
     .long efi_amd64_entry_address_tag_end - efi_amd64_entry_address_tag_start
     .long efi64
 efi_amd64_entry_address_tag_end:
+#endif/* EFI_BOOT_SERVICES*/
 
 #if RELOCATABLE_HEADER
 .align 8

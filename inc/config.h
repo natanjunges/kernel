@@ -15,6 +15,8 @@ limitations under the License. */
 #ifndef CONFIG_H
 #define CONFIG_H
 
+#define FRAMEBUFFER 1
+
 #define MODULE_ALIGNMENT 0
 
 #define EFI_BOOT_SERVICES 0

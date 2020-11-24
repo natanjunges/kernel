@@ -1,16 +1,32 @@
+/* Copyright 2020 Natan Junges
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License. */
+
 #ifndef MULTIBOOT2_MBI_H
 #define MULTIBOOT2_MBI_H
 
+#include <multiboot2.h>
 #include <stdint.h>
-
-struct mbi_header {
-    uint32_t total_size;
-    uint32_t reserved;
-};
 
 struct mbi_tag {
     uint32_t type;
     uint32_t size;
+};
+
+struct mbi_header {
+    uint32_t total_size;
+    uint32_t reserved;
+    struct mbi_tag tags[0];
 };
 
 struct mbi_tag_boot_command_line {
@@ -83,7 +99,7 @@ struct mbi_tag_framebuffer_info {
     uint32_t framebuffer_height;
     uint8_t framebuffer_bpp;
     uint8_t framebuffer_type;
-    uint8_t reserved;
+    uint16_t reserved;
     struct mbi_tag_framebuffer_info_color_info color_info;
 };
 
