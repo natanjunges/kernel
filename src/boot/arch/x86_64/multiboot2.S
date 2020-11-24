@@ -50,6 +50,34 @@ information_request_tag_start:
 information_request_tag_end:
 
 .align 8
+framebuffer_tag_start:
+    .word MULTIBOOT2_HEADER_TAG_TYPE_FRAMEBUFFER
+    .word 0
+    .long framebuffer_tag_end - framebuffer_tag_start
+    .long 0
+    .long 0
+    .long 0
+framebuffer_tag_end:
+
+#if MODULE_ALIGNMENT
+.align 8
+module_alignment_tag_start:
+    .word MULTIBOOT2_HEADER_TAG_TYPE_MODULE_ALIGNMENT
+    .word 0
+    .long module_alignment_tag_end - module_alignment_tag_start
+module_alignment_tag_end:
+#endif/* MODULE_ALIGNMENT*/
+
+#if EFI_BOOT_SERVICES
+.align 8
+efi_boot_services_tag_start:
+    .word MULTIBOOT2_HEADER_TAG_TYPE_EFI_BOOT_SERVICES
+    .word 0
+    .long efi_boot_services_tag_end - efi_boot_services_tag_start
+efi_boot_services_tag_end:
+#endif/* EFI_BOOT_SERVICES*/
+
+.align 8
 efi_i386_entry_address_tag_start:
     .word MULTIBOOT2_HEADER_TAG_TYPE_EFI_I386_ENTRY_ADDRESS
     .word MULTIBOOT2_HEADER_TAG_FLAGS_OPTIONAL
@@ -65,24 +93,18 @@ efi_amd64_entry_address_tag_start:
     .long efi64
 efi_amd64_entry_address_tag_end:
 
+#if RELOCATABLE_HEADER
 .align 8
-framebuffer_tag_start:
-    .word MULTIBOOT2_HEADER_TAG_TYPE_FRAMEBUFFER
+relocatable_header_tag_start:
+    .word MULTIBOOT2_HEADER_TAG_TYPE_RELOCATABLE_HEADER
     .word 0
-    .long framebuffer_tag_end - framebuffer_tag_start
-    .long 0
-    .long 0
-    .long 0
-framebuffer_tag_end:
-
-#if EFI_BOOT_SERVICES
-.align 8
-efi_boot_services_tag_start:
-    .word MULTIBOOT2_HEADER_TAG_TYPE_EFI_BOOT_SERVICES
-    .word 0
-    .long efi_boot_services_tag_end - efi_boot_services_tag_start
-efi_boot_services_tag_end:
-#endif/* EFI_BOOT_SERVICES*/
+    .long relocatable_header_tag_end - relocatable_header_tag_start
+    .long 0x00100000
+    .long 0xFFFFFFFF
+    .long 4096
+    .long MULTIBOOT2_HEADER_TAG_PREFERENCE_NONE
+relocatable_header_tag_end:
+#endif/* RELOCATABLE_HEADER*/
 
 .align 8
     .word MULTIBOOT2_HEADER_TAG_TYPE_END

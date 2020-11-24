@@ -22,9 +22,9 @@ limitations under the License. */
 
 #define EFLAGS_ID (1 << 21)
 
-#define CPUID_EXTENDED_FUNCTIONS 0x80000000
+#define CPUID_EXTENDED_FUNCTION 0x80000000
 #define CPUID_EXTENDED_FEATURES 0x80000001
-#define CPUID_LONG_MODE (1 << 29)
+#define CPUID_INTEL_64 (1 << 29)
 
 #define PAGING_PAGE_SIZE (1 << 7)
 #define PAGING_READ_WRITE (1 << 1)
@@ -32,8 +32,8 @@ limitations under the License. */
 
 #define CR4_PAE (1 << 5)
 
-#define EFER_MSR 0xC0000080
-#define EFER_MSR_LONG_MODE (1 << 8)
+#define MSR_IA32_EFER 0xC0000080
+#define MSR_IA32_EFER_LME (1 << 8)
 
 #define CR0_PG (1 << 31)
 

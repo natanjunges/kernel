@@ -66,13 +66,13 @@ check_cpuid:
     jmp $0xFFFF, $0x0000
 
 check_long_mode:
-    mov $CPUID_EXTENDED_FUNCTIONS, %eax
+    mov $CPUID_EXTENDED_FUNCTION, %eax
     cpuid
     cmp $CPUID_EXTENDED_FEATURES, %eax
     jb .no_long_mode
     mov $CPUID_EXTENDED_FEATURES, %eax
     cpuid
-    test $CPUID_LONG_MODE, %edx
+    test $CPUID_INTEL_64, %edx
     jz .no_long_mode
     ret
 .no_long_mode:
@@ -157,9 +157,9 @@ enable_pae:
     ret
 
 enter_long_mode:
-    mov $EFER_MSR, %ecx
+    mov $MSR_IA32_EFER, %ecx
     rdmsr
-    or $EFER_MSR_LONG_MODE, %eax
+    or $MSR_IA32_EFER_LME, %eax
     wrmsr
     ret
 

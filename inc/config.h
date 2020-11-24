@@ -15,7 +15,11 @@ limitations under the License. */
 #ifndef CONFIG_H
 #define CONFIG_H
 
+#define MODULE_ALIGNMENT 0
+
 #define EFI_BOOT_SERVICES 0
+
+#define RELOCATABLE_HEADER 0
 
 #define STACK_SIZE 0x4000
 
