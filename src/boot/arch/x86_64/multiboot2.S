@@ -81,7 +81,7 @@ efi_boot_services_tag_end:
 .align 8
 efi_i386_entry_address_tag_start:
     .word MULTIBOOT2_HEADER_TAG_TYPE_EFI_I386_ENTRY_ADDRESS
-    .word 0
+    .word MULTIBOOT2_HEADER_TAG_FLAGS_OPTIONAL
     .long efi_i386_entry_address_tag_end - efi_i386_entry_address_tag_start
     .long start
 efi_i386_entry_address_tag_end:
@@ -89,7 +89,7 @@ efi_i386_entry_address_tag_end:
 .align 8
 efi_amd64_entry_address_tag_start:
     .word MULTIBOOT2_HEADER_TAG_TYPE_EFI_AMD64_ENTRY_ADDRESS
-    .word 0
+    .word MULTIBOOT2_HEADER_TAG_FLAGS_OPTIONAL
     .long efi_amd64_entry_address_tag_end - efi_amd64_entry_address_tag_start
     .long efi64
 efi_amd64_entry_address_tag_end:
