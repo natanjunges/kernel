@@ -17,7 +17,7 @@ limitations under the License. */
 
 .extern start64
 
-.global start, stack
+.global start, stack, .gdt64_code
 
 .section .rodata
 gdt64:
@@ -34,7 +34,7 @@ gdt64:
 start:
     cli
     mov $stack, %esp
-    //Move multiboot2 special values to final locations, as %eax and %ebx will be overwritten
+    //Moves multiboot2 special values to final locations, as %eax and %ebx will be overwritten
     mov %eax, %edi
     mov %ebx, %esi
     call check_cpuid
@@ -62,7 +62,7 @@ check_cpuid:
     je .no_cpuid
     ret
 .no_cpuid:
-    //Force reset by triple fault
+    //Forces reset by triple fault
     jmp $0xFFFF, $0x0000
 
 check_long_mode:
@@ -76,7 +76,7 @@ check_long_mode:
     jz .no_long_mode
     ret
 .no_long_mode:
-    //Force reset by triple fault
+    //Forces reset by triple fault
     jmp $0xFFFF, $0x0000
 
 /* Identity maps the first 4 GiB of memory */
@@ -97,48 +97,48 @@ set_up_page_tables:
     or $(PAGING_READ_WRITE | PAGING_PRESENT), %eax
     mov %eax, (p3_table + 24)
     mov $0, %ecx
+    mov $p2_1_table, %ebx
 .map_p2_1_table:
     //2 MiB pages
     mov $0x200000, %eax
     mul %ecx
     or $(PAGING_READ_WRITE | PAGING_PRESENT | PAGING_PAGE_SIZE), %eax
-    mov $p2_1_table, %ebx
     mov %eax, (%ebx, %ecx, 8)
     inc %ecx
     cmp $512, %ecx
     jne .map_p2_1_table
     mov $0, %ecx
+    mov $p2_2_table, %ebx
 .map_p2_2_table:
     //2 MiB pages
     mov $0x200000, %eax
     mul %ecx
     add $0x40000000, %eax
     or $(PAGING_READ_WRITE | PAGING_PRESENT | PAGING_PAGE_SIZE), %eax
-    mov $p2_2_table, %ebx
     mov %eax, (%ebx, %ecx, 8)
     inc %ecx
     cmp $512, %ecx
     jne .map_p2_2_table
     mov $0, %ecx
+    mov $p2_3_table, %ebx
 .map_p2_3_table:
     //2 MiB pages
     mov $0x200000, %eax
     mul %ecx
     add $0x80000000, %eax
     or $(PAGING_READ_WRITE | PAGING_PRESENT | PAGING_PAGE_SIZE), %eax
-    mov $p2_3_table, %ebx
     mov %eax, (%ebx, %ecx, 8)
     inc %ecx
     cmp $512, %ecx
     jne .map_p2_3_table
     mov $0, %ecx
+    mov $p2_4_table, %ebx
 .map_p2_4_table:
     //2 MiB pages
     mov $0x200000, %eax
     mul %ecx
     add $0xC0000000, %eax
     or $(PAGING_READ_WRITE | PAGING_PRESENT | PAGING_PAGE_SIZE), %eax
-    mov $p2_4_table, %ebx
     mov %eax, (%ebx, %ecx, 8)
     inc %ecx
     cmp $512, %ecx
