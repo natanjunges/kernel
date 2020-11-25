@@ -40,7 +40,6 @@ limitations under the License. */
 #define LAPIC_SIVR 0xF0
 
 #define IDT_PRESENT (1 << 7)
-#define IDT_STORAGE (1 << 4)
 #define IDT_GATE_TYPE_INTERRUPT 0xE
 #define IDT_GATE_TYPE_TRAP 0xF
 

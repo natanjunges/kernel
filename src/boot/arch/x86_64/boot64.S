@@ -108,7 +108,7 @@ fill_idt:
     movw %ax, (%rbx, %rcx, 8)
     movw $.gdt64_code, 2(%rbx, %rcx, 8)
     movb $0, 4(%rbx, %rcx, 8)
-    movb $(IDT_PRESENT | IDT_STORAGE | IDT_GATE_TYPE_TRAP), 5(%rbx, %rcx, 8)
+    movb $(IDT_PRESENT | IDT_GATE_TYPE_TRAP), 5(%rbx, %rcx, 8)
     shr $16, %rax
     movw %ax, 6(%rbx, %rcx, 8)
     shr $16, %rax
@@ -122,7 +122,7 @@ fill_idt:
     movw %ax, (%rbx, %rcx, 8)
     movw $.gdt64_code, 2(%rbx, %rcx, 8)
     movb $0, 4(%rbx, %rcx, 8)
-    movb $(IDT_PRESENT | IDT_STORAGE | IDT_GATE_TYPE_TRAP), 5(%rbx, %rcx, 8)
+    movb $(IDT_PRESENT | IDT_GATE_TYPE_TRAP), 5(%rbx, %rcx, 8)
     shr $16, %rax
     movw %ax, 6(%rbx, %rcx, 8)
     shr $16, %rax
@@ -134,7 +134,7 @@ fill_idt:
     movw %ax, (%rbx, %rcx, 8)
     movw $.gdt64_code, 2(%rbx, %rcx, 8)
     movb $0, 4(%rbx, %rcx, 8)
-    movb $(IDT_PRESENT | IDT_STORAGE | IDT_GATE_TYPE_TRAP), 5(%rbx, %rcx, 8)
+    movb $(IDT_PRESENT | IDT_GATE_TYPE_TRAP), 5(%rbx, %rcx, 8)
     shr $16, %rax
     movw %ax, 6(%rbx, %rcx, 8)
     shr $16, %rax
@@ -147,7 +147,7 @@ fill_idt:
     movw %ax, (%rbx, %rcx, 8)
     movw $.gdt64_code, 2(%rbx, %rcx, 8)
     movb $0, 4(%rbx, %rcx, 8)
-    movb $(IDT_PRESENT | IDT_STORAGE | IDT_GATE_TYPE_TRAP), 5(%rbx, %rcx, 8)
+    movb $(IDT_PRESENT | IDT_GATE_TYPE_TRAP), 5(%rbx, %rcx, 8)
     shr $16, %rax
     movw %ax, 6(%rbx, %rcx, 8)
     shr $16, %rax
@@ -161,7 +161,7 @@ fill_idt:
     movw %ax, (%rbx, %rcx, 8)
     movw $.gdt64_code, 2(%rbx, %rcx, 8)
     movb $0, 4(%rbx, %rcx, 8)
-    movb $(IDT_PRESENT | IDT_STORAGE | IDT_GATE_TYPE_TRAP), 5(%rbx, %rcx, 8)
+    movb $(IDT_PRESENT | IDT_GATE_TYPE_TRAP), 5(%rbx, %rcx, 8)
     shr $16, %rax
     movw %ax, 6(%rbx, %rcx, 8)
     shr $16, %rax
@@ -173,7 +173,7 @@ fill_idt:
     movw %ax, (%rbx, %rcx, 8)
     movw $.gdt64_code, 2(%rbx, %rcx, 8)
     movb $0, 4(%rbx, %rcx, 8)
-    movb $(IDT_PRESENT | IDT_STORAGE | IDT_GATE_TYPE_TRAP), 5(%rbx, %rcx, 8)
+    movb $(IDT_PRESENT | IDT_GATE_TYPE_TRAP), 5(%rbx, %rcx, 8)
     shr $16, %rax
     movw %ax, 6(%rbx, %rcx, 8)
     shr $16, %rax
@@ -185,7 +185,7 @@ fill_idt:
     movw %ax, (%rbx, %rcx, 8)
     movw $.gdt64_code, 2(%rbx, %rcx, 8)
     movb $0, 4(%rbx, %rcx, 8)
-    movb $(IDT_PRESENT | IDT_STORAGE | IDT_GATE_TYPE_TRAP), 5(%rbx, %rcx, 8)
+    movb $(IDT_PRESENT | IDT_GATE_TYPE_TRAP), 5(%rbx, %rcx, 8)
     shr $16, %rax
     movw %ax, 6(%rbx, %rcx, 8)
     shr $16, %rax
@@ -198,7 +198,7 @@ fill_idt:
     movw %ax, (%rbx, %rcx, 8)
     movw $.gdt64_code, 2(%rbx, %rcx, 8)
     movb $0, 4(%rbx, %rcx, 8)
-    movb $(IDT_PRESENT | IDT_STORAGE | IDT_GATE_TYPE_TRAP), 5(%rbx, %rcx, 8)
+    movb $(IDT_PRESENT | IDT_GATE_TYPE_TRAP), 5(%rbx, %rcx, 8)
     shr $16, %rax
     movw %ax, 6(%rbx, %rcx, 8)
     shr $16, %rax
@@ -212,7 +212,7 @@ fill_idt:
     movw %ax, (%rbx, %rcx, 8)
     movw $.gdt64_code, 2(%rbx, %rcx, 8)
     movb $0, 4(%rbx, %rcx, 8)
-    movb $(IDT_PRESENT | IDT_STORAGE | IDT_GATE_TYPE_TRAP), 5(%rbx, %rcx, 8)
+    movb $(IDT_PRESENT | IDT_GATE_TYPE_TRAP), 5(%rbx, %rcx, 8)
     shr $16, %rax
     movw %ax, 6(%rbx, %rcx, 8)
     shr $16, %rax
@@ -224,7 +224,7 @@ fill_idt:
     movw %ax, (%rbx, %rcx, 8)
     movw $.gdt64_code, 2(%rbx, %rcx, 8)
     movb $0, 4(%rbx, %rcx, 8)
-    movb $(IDT_PRESENT | IDT_STORAGE | IDT_GATE_TYPE_TRAP), 5(%rbx, %rcx, 8)
+    movb $(IDT_PRESENT | IDT_GATE_TYPE_TRAP), 5(%rbx, %rcx, 8)
     shr $16, %rax
     movw %ax, 6(%rbx, %rcx, 8)
     shr $16, %rax
@@ -237,7 +237,7 @@ fill_idt:
     movw %ax, (%rbx, %rcx, 8)
     movw $.gdt64_code, 2(%rbx, %rcx, 8)
     movb $0, 4(%rbx, %rcx, 8)
-    movb $(IDT_PRESENT | IDT_STORAGE | IDT_GATE_TYPE_INTERRUPT), 5(%rbx, %rcx, 8)
+    movb $(IDT_PRESENT | IDT_GATE_TYPE_INTERRUPT), 5(%rbx, %rcx, 8)
     shr $16, %rax
     movw %ax, 6(%rbx, %rcx, 8)
     shr $16, %rax
@@ -254,7 +254,7 @@ fill_idt:
     movw %ax, (%rbx, %rcx, 8)
     movw $.gdt64_code, 2(%rbx, %rcx, 8)
     movb $0, 4(%rbx, %rcx, 8)
-    movb $(IDT_PRESENT | IDT_STORAGE | IDT_GATE_TYPE_INTERRUPT), 5(%rbx, %rcx, 8)
+    movb $(IDT_PRESENT | IDT_GATE_TYPE_INTERRUPT), 5(%rbx, %rcx, 8)
     shr $16, %rax
     movw %ax, 6(%rbx, %rcx, 8)
     shr $16, %rax
