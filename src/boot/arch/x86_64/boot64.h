@@ -31,7 +31,8 @@ limitations under the License. */
 
 #define PIC_ICW4_8086 (1 << 0)
 
-#define PIC_MASK_ALL 0xFF
+#define PIC1_MASK_ALL 0xFB
+#define PIC2_MASK_ALL 0xFF
 
 #define PIC_EOI 0x20
 

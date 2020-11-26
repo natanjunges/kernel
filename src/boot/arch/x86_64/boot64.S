@@ -89,9 +89,10 @@ remap_irqs:
 
 /* Disables PIC by masking all its interrupts */
 disable_pic:
-    mov $PIC_MASK_ALL, %al
-    out %al, $PIC2_DATA
+    mov $PIC1_MASK_ALL, %al
     out %al, $PIC1_DATA
+    mov $PIC2_MASK_ALL, %al
+    out %al, $PIC2_DATA
     ret
 
 /* Enables LAPIC by setting the Spurious Interrupt Vector Register */
