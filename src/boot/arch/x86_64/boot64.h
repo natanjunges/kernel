@@ -33,16 +33,16 @@ limitations under the License. */
 
 #define PIC_MASK_ALL 0xFF
 
-#define LAPIC_ENABLE (1 << 8)
-#define LAPIC_SPURIOUS_INTERRUPT 0xFF
+#define PIC_EOI 0x20
 
 #define LAPIC_BASE 0xFEE00000
 #define LAPIC_SIVR 0xF0
 
+#define LAPIC_ENABLE (1 << 8)
+#define LAPIC_SPURIOUS_INTERRUPT 0xFF
+
 #define IDT_PRESENT (1 << 7)
 #define IDT_GATE_TYPE_INTERRUPT 0xE
 #define IDT_GATE_TYPE_TRAP 0xF
-
-#define PIC_EOI 0x20
 
 #endif/* !BOOT64_H*/

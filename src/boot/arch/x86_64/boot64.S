@@ -114,8 +114,7 @@ fill_idt:
     shr $16, %rax
     movl %eax, 8(%rbx, %rcx, 8)
     movl $0, 12(%rbx, %rcx, 8)
-    inc %rcx
-    inc %rcx
+    add $2, %rcx
     cmp $16, %rcx
     jne .exc_loop_1
     mov $exception_error_handler, %rax
@@ -128,8 +127,7 @@ fill_idt:
     shr $16, %rax
     movl %eax, 8(%rbx, %rcx, 8)
     movl $0, 12(%rbx, %rcx, 8)
-    inc %rcx
-    inc %rcx
+    add $2, %rcx
     mov $exception_handler, %rax
     movw %ax, (%rbx, %rcx, 8)
     movw $.gdt64_code, 2(%rbx, %rcx, 8)
@@ -140,8 +138,7 @@ fill_idt:
     shr $16, %rax
     movl %eax, 8(%rbx, %rcx, 8)
     movl $0, 12(%rbx, %rcx, 8)
-    inc %rcx
-    inc %rcx
+    add $2, %rcx
 .exc_err_loop:
     mov $exception_error_handler, %rax
     movw %ax, (%rbx, %rcx, 8)
@@ -153,8 +150,7 @@ fill_idt:
     shr $16, %rax
     movl %eax, 8(%rbx, %rcx, 8)
     movl $0, 12(%rbx, %rcx, 8)
-    inc %rcx
-    inc %rcx
+    add $2, %rcx
     cmp $30, %rcx
     jne .exc_err_loop
     mov $exception_handler, %rax
@@ -167,8 +163,7 @@ fill_idt:
     shr $16, %rax
     movl %eax, 8(%rbx, %rcx, 8)
     movl $0, 12(%rbx, %rcx, 8)
-    inc %rcx
-    inc %rcx
+    add $2, %rcx
     mov $exception_handler, %rax
     movw %ax, (%rbx, %rcx, 8)
     movw $.gdt64_code, 2(%rbx, %rcx, 8)
@@ -179,8 +174,7 @@ fill_idt:
     shr $16, %rax
     movl %eax, 8(%rbx, %rcx, 8)
     movl $0, 12(%rbx, %rcx, 8)
-    inc %rcx
-    inc %rcx
+    add $2, %rcx
     mov $exception_error_handler, %rax
     movw %ax, (%rbx, %rcx, 8)
     movw $.gdt64_code, 2(%rbx, %rcx, 8)
@@ -191,8 +185,7 @@ fill_idt:
     shr $16, %rax
     movl %eax, 8(%rbx, %rcx, 8)
     movl $0, 12(%rbx, %rcx, 8)
-    inc %rcx
-    inc %rcx
+    add $2, %rcx
 .exc_loop_2:
     mov $exception_handler, %rax
     movw %ax, (%rbx, %rcx, 8)
@@ -204,8 +197,7 @@ fill_idt:
     shr $16, %rax
     movl %eax, 8(%rbx, %rcx, 8)
     movl $0, 12(%rbx, %rcx, 8)
-    inc %rcx
-    inc %rcx
+    add $2, %rcx
     cmp $60, %rcx
     jne .exc_loop_2
     mov $exception_error_handler, %rax
@@ -218,8 +210,7 @@ fill_idt:
     shr $16, %rax
     movl %eax, 8(%rbx, %rcx, 8)
     movl $0, 12(%rbx, %rcx, 8)
-    inc %rcx
-    inc %rcx
+    add $2, %rcx
     mov $exception_handler, %rax
     movw %ax, (%rbx, %rcx, 8)
     movw $.gdt64_code, 2(%rbx, %rcx, 8)
@@ -232,8 +223,8 @@ fill_idt:
     movl $0, 12(%rbx, %rcx, 8)
     mov $0, %rcx
     add $512, %rbx
-.pic1_loop:
-    mov $pic1_handler, %rax
+.int_loop:
+    mov $interrupt_handler, %rax
     movw %ax, (%rbx, %rcx, 8)
     movw $.gdt64_code, 2(%rbx, %rcx, 8)
     movb $0, 4(%rbx, %rcx, 8)
@@ -243,27 +234,9 @@ fill_idt:
     shr $16, %rax
     movl %eax, 8(%rbx, %rcx, 8)
     movl $0, 12(%rbx, %rcx, 8)
-    inc %rcx
-    inc %rcx
-    cmp $16, %rcx
-    jne .pic1_loop
-    mov $0, %rcx
-    add $128, %rbx
-.pic2_loop:
-    mov $pic2_handler, %rax
-    movw %ax, (%rbx, %rcx, 8)
-    movw $.gdt64_code, 2(%rbx, %rcx, 8)
-    movb $0, 4(%rbx, %rcx, 8)
-    movb $(IDT_PRESENT | IDT_GATE_TYPE_INTERRUPT), 5(%rbx, %rcx, 8)
-    shr $16, %rax
-    movw %ax, 6(%rbx, %rcx, 8)
-    shr $16, %rax
-    movl %eax, 8(%rbx, %rcx, 8)
-    movl $0, 12(%rbx, %rcx, 8)
-    inc %rcx
-    inc %rcx
-    cmp $16, %rcx
-    jne .pic2_loop
+    add $2, %rcx
+    cmp $32, %rcx
+    jne .int_loop
     ret
 
 exception_handler:
@@ -274,40 +247,8 @@ exception_error_handler:
     add $8, %rsp
     iretq
 
-pic1_handler:
-    push %rax
-    push %rbx
-    push %rcx
-    push %rdx
-    push %rsi
-    push %rdi
-    push %r8
-    push %r9
-    push %r10
-    push %r11
-    push %r12
-    push %r13
-    push %r14
-    push %r15
-    mov $PIC_EOI, %al
-    out %al, $PIC1_COMMAND
-    pop %r15
-    pop %r14
-    pop %r13
-    pop %r12
-    pop %r11
-    pop %r10
-    pop %r9
-    pop %r8
-    pop %rdi
-    pop %rsi
-    pop %rdx
-    pop %rcx
-    pop %rbx
-    pop %rax
-    iretq
-
-pic2_handler:
+interrupt_handler:
+    cli
     push %rax
     push %rbx
     push %rcx
@@ -339,6 +280,7 @@ pic2_handler:
     pop %rcx
     pop %rbx
     pop %rax
+    sti
     iretq
 
 .section .data
