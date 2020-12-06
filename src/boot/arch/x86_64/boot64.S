@@ -35,7 +35,6 @@ start64:
     mov %ax, %gs
     call remap_irqs
     call disable_pic
-    call enable_lapic
     call fill_idt
     //Loads IDT and enables interrupts
     lidt (.idt64_pointer)
@@ -93,12 +92,6 @@ disable_pic:
     out %al, $PIC1_DATA
     mov $PIC2_MASK_ALL, %al
     out %al, $PIC2_DATA
-    ret
-
-/* Enables LAPIC by setting the Spurious Interrupt Vector Register */
-enable_lapic:
-    mov $(LAPIC_ENABLE | LAPIC_SPURIOUS_INTERRUPT), %eax
-    mov %eax, (LAPIC_BASE + LAPIC_SIVR)
     ret
 
 fill_idt:
