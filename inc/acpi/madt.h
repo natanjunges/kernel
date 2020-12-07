@@ -80,6 +80,13 @@ struct acpi_madt_record_lapicao {
 #define ACPI_MADT_RECORD_INTERRUPT_FLAGS_LOW (1 << 1)
 #define ACPI_MADT_RECORD_INTERRUPT_FLAGS_LEVEL (1 << 3)
 
+/**
+ * Finds the next record in the MADT, provided the last accessed record.
+ *
+ * @param self The MADT.
+ * @param record The last accessed record.
+ * @return The next record in the MADT, or NULL if any of the arguments is NULL, record is not inside the MADT, or if it reaches the end of MADT.
+ */
 struct acpi_madt_record * acpi_madt_nextRecord(struct acpi_madt * self, struct acpi_madt_record * record);
 
 #endif/* !MADT_H*/

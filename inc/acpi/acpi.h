@@ -55,7 +55,22 @@ struct acpi_xsdt {
     uint64_t sdt_pointers[0];
 } __attribute__((packed));
 
+/**
+ * Goes through SDTs in RSDT and finds the SDT whose signature matches the provided signature.
+ *
+ * @param self The RSDPv1.
+ * @param signature The signature of the desired SDT.
+ * @return The SDT whose signature matches the provided signature, or NULL if any of the arguments is NULL or no such SDT is found.
+ */
 struct acpi_sdt * acpi_old_rsdp_getSDT(struct acpi_old_rsdp * self, char signature[4]);
+
+/**
+ * Goes through SDTs in XSDT and finds the SDT whose signature matches the provided signature.
+ *
+ * @param self The RSDPv2+.
+ * @param signature The signature of the desired SDT.
+ * @return The SDT whose signature matches the provided signature, or NULL if any of the arguments is NULL or no such SDT is found.
+ */
 struct acpi_sdt * acpi_new_rsdp_getSDT(struct acpi_new_rsdp * self, char signature[4]);
 
 #endif/* !ACPI_H*/

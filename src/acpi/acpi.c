@@ -16,6 +16,10 @@ limitations under the License. */
 #include <acpi/acpi.h>
 
 struct acpi_sdt * acpi_old_rsdp_getSDT(struct acpi_old_rsdp * self, char signature[4]) {
+    if (self == 0 || signature == 0) {
+        return 0;
+    }
+
     struct acpi_rsdt * rsdt = (struct acpi_rsdt *)((uintptr_t)self->rsdt_address);
     uint32_t length = (rsdt->header.length - sizeof(struct acpi_sdt))/4;
 
@@ -31,6 +35,10 @@ struct acpi_sdt * acpi_old_rsdp_getSDT(struct acpi_old_rsdp * self, char signatu
 }
 
 struct acpi_sdt * acpi_new_rsdp_getSDT(struct acpi_new_rsdp * self, char signature[4]) {
+    if (self == 0 || signature == 0) {
+        return 0;
+    }
+
     struct acpi_xsdt * xsdt = (struct acpi_xsdt *)self->xsdt_address;
     uint32_t length = (xsdt->header.length - sizeof(struct acpi_sdt))/8;
 

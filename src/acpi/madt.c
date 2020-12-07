@@ -16,6 +16,10 @@ limitations under the License. */
 #include <acpi/madt.h>
 
 struct acpi_madt_record * acpi_madt_nextRecord(struct acpi_madt * self, struct acpi_madt_record * record) {
+    if (self == 0 || record == 0 || record < self->records || (uintptr_t)record >= (uintptr_t)self + self->header.length) {
+        return 0;
+    }
+
     struct acpi_madt_record * ret = record;
     ret = (struct acpi_madt_record *)((uintptr_t)ret + ret->length);
 
