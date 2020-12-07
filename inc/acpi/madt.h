@@ -12,48 +12,11 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License. */
 
-#ifndef ACPI_H
-#define ACPI_H
+#ifndef MADT_H
+#define MADT_H
 
 #include <stdint.h>
-
-struct acpi_old_rsdp {
-    char signature[8];
-    uint8_t checksum;
-    char oem_id[6];
-    uint8_t revision;
-    uint32_t rsdt_address;
-} __attribute__((packed));
-
-struct acpi_new_rsdp {
-    struct acpi_old_rsdp old_rsdp;
-    uint32_t length;
-    uint64_t xsdt_address;
-    uint8_t checksum;
-    uint8_t reserved[3];
-} __attribute__((packed));
-
-struct acpi_sdt {
-    char signature[4];
-    uint32_t length;
-    uint8_t revision;
-    uint8_t checksum;
-    char oem_id[6];
-    char oem_table_id[8];
-    uint32_t oem_revision;
-    uint32_t creator_id;
-    uint32_t creator_revision;
-} __attribute__((packed));
-
-struct acpi_rsdt {
-    struct acpi_sdt header;
-    uint32_t sdt_pointers[0];
-} __attribute__((packed));
-
-struct acpi_xsdt {
-    struct acpi_sdt header;
-    uint64_t sdt_pointers[0];
-} __attribute__((packed));
+#include <acpi/acpi.h>
 
 struct acpi_madt_record {
     uint8_t entry_type;
@@ -117,4 +80,6 @@ struct acpi_madt_record_lapicao {
 #define ACPI_MADT_RECORD_INTERRUPT_FLAGS_LOW (1 << 1)
 #define ACPI_MADT_RECORD_INTERRUPT_FLAGS_LEVEL (1 << 3)
 
-#endif/* !ACPI_H*/
+struct acpi_madt_record * acpi_madt_nextRecord(struct acpi_madt * self, struct acpi_madt_record * record);
+
+#endif/* !MADT_H*/

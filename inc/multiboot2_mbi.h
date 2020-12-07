@@ -15,9 +15,9 @@ limitations under the License. */
 #ifndef MULTIBOOT2_MBI_H
 #define MULTIBOOT2_MBI_H
 
-#include <multiboot2.h>
-#include <acpi.h>
 #include <stdint.h>
+#include <multiboot2.h>
+#include <acpi/acpi.h>
 
 struct mbi_tag {
     uint32_t type;
