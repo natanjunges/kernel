@@ -19,7 +19,7 @@ QEMU ?= qemu-system-$(TARGET)
 PWD = $(shell pwd)
 INC ?= $(PWD)/inc
 BUILD ?= $(PWD)/build
-SUBMAKES = boot acpi
+SUBMAKES = boot acpi apic
 
 linker_ld := $(PWD)/src/linker.ld
 grub_cfg := $(PWD)/src/boot/grub.cfg

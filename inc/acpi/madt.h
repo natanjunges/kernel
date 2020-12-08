@@ -26,8 +26,10 @@ struct acpi_madt {
 #define ACPI_SDT_SIGNATURE_MADT "APIC"
     const struct acpi_sdt header;
     const uint32_t lapic_address;
-#define ACPI_MADT_FLAGS_MASK_PIC (1 << 0)
-    const uint32_t flags;
+    const struct {
+        const uint32_t mask_pic:1;
+        const uint32_t reserved:31;
+    } flags;
     const struct acpi_madt_record records[0];
 } __attribute__((packed));
 
@@ -36,9 +38,11 @@ struct acpi_madt_record_lapic {
     const struct acpi_madt_record header;
     const uint8_t acpi_pid;
     const uint8_t apic_id;
-#define ACPI_MADT_RECORD_LAPIC_FLAGS_ENABLED (1 << 0)
-#define ACPI_MADT_RECORD_LAPIC_FLAGS_ONLINE (1 << 1)
-    const uint32_t flags;
+    const struct {
+        const uint32_t processor_enabled:1;
+        const uint32_t online_capable:1;
+        const uint32_t reserved:30;
+    } flags;
 } __attribute__((packed));
 
 struct acpi_madt_record_ioapic {
@@ -50,20 +54,32 @@ struct acpi_madt_record_ioapic {
     const uint32_t gsib;
 } __attribute__((packed));
 
+struct acpi_madt_record_interrupt_flags {
+    const uint16_t reserved0:1;
+#define ACPI_MADT_RECORD_INTERRUPT_FLAGS_PIN_POLARITY_HIGH 0
+#define ACPI_MADT_RECORD_INTERRUPT_FLAGS_PIN_POLARITY_LOW 1
+    const uint16_t pin_polarity:1;
+    const uint16_t reserved1:1;
+#define ACPI_MADT_RECORD_INTERRUPT_FLAGS_TRIGGER_MODE_EDGE 0
+#define ACPI_MADT_RECORD_INTERRUPT_FLAGS_TRIGGER_MODE_LEVEL 1
+    const uint16_t trigger_mode:1;
+    const uint16_t reserved2:12;
+} __attribute__((packed));
+
 struct acpi_madt_record_iso {
 #define ACPI_MADT_RECORD_ENTRY_TYPE_ISO 2
     const struct acpi_madt_record header;
     const uint8_t bus_source;
     const uint8_t irq_source;
     const uint32_t gsi;
-    const uint16_t interrupt_flags;
+    const struct acpi_madt_record_interrupt_flags interrupt_flags;
 } __attribute__((packed));
 
 struct acpi_madt_record_nmi {
 #define ACPI_MADT_RECORD_ENTRY_TYPE_NMI 4
     const struct acpi_madt_record header;
     const uint8_t acpi_pid;
-    const uint16_t interrupt_flags;
+    const struct acpi_madt_record_interrupt_flags interrupt_flags;
 #define ACPI_MADT_RECORD_NMI_LINT0 0
 #define ACPI_MADT_RECORD_NMI_LINT1 1
     const uint8_t lint;
@@ -75,9 +91,6 @@ struct acpi_madt_record_lapicao {
     const uint16_t reserved;
     const uint64_t address;
 } __attribute__((packed));
-
-#define ACPI_MADT_RECORD_INTERRUPT_FLAGS_LOW (1 << 1)
-#define ACPI_MADT_RECORD_INTERRUPT_FLAGS_LEVEL (1 << 3)
 
 /**
  * Finds the next record in the MADT, provided the last accessed record.
