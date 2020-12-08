@@ -15,7 +15,7 @@ limitations under the License. */
 #include <stdint.h>
 #include <acpi/acpi.h>
 
-const struct acpi_sdt * acpi_old_rsdp_getSDT(const struct acpi_old_rsdp * const self, const char signature[4]) {
+const struct acpi_sdt * acpi_old_rsdp_get_SDT(const struct acpi_old_rsdp * const self, const char signature[4]) {
     if (self == 0 || signature == 0) {
         return 0;
     }
@@ -34,7 +34,7 @@ const struct acpi_sdt * acpi_old_rsdp_getSDT(const struct acpi_old_rsdp * const 
     return 0;
 }
 
-const struct acpi_sdt * acpi_new_rsdp_getSDT(const struct acpi_new_rsdp * const self, const char signature[4]) {
+const struct acpi_sdt * acpi_new_rsdp_get_SDT(const struct acpi_new_rsdp * const self, const char signature[4]) {
     if (self == 0 || signature == 0) {
         return 0;
     }

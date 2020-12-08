@@ -61,7 +61,7 @@ struct acpi_xsdt {
  * @param signature The signature of the desired SDT.
  * @return The SDT whose signature matches the provided signature, or NULL if any of the arguments is NULL or no such SDT is found.
  */
-const struct acpi_sdt * acpi_old_rsdp_getSDT(const struct acpi_old_rsdp * const self, const char signature[4]);
+const struct acpi_sdt * acpi_old_rsdp_get_SDT(const struct acpi_old_rsdp * const self, const char signature[4]);
 
 /**
  * Goes through SDTs in XSDT and finds the SDT whose signature matches the provided signature.
@@ -70,4 +70,4 @@ const struct acpi_sdt * acpi_old_rsdp_getSDT(const struct acpi_old_rsdp * const 
  * @param signature The signature of the desired SDT.
  * @return The SDT whose signature matches the provided signature, or NULL if any of the arguments is NULL or no such SDT is found.
  */
-const struct acpi_sdt * acpi_new_rsdp_getSDT(const struct acpi_new_rsdp * const self, const char signature[4]);
+const struct acpi_sdt * acpi_new_rsdp_get_SDT(const struct acpi_new_rsdp * const self, const char signature[4]);

@@ -86,4 +86,4 @@ struct acpi_madt_record_lapicao {
  * @param record The last accessed record.
  * @return The next record in the MADT, or NULL if any of the arguments is NULL, record is not inside the MADT, or if it reaches the end of MADT.
  */
-const struct acpi_madt_record * acpi_madt_nextRecord(const struct acpi_madt * const self, const struct acpi_madt_record * const record);
+const struct acpi_madt_record * acpi_madt_next_record(const struct acpi_madt * const self, const struct acpi_madt_record * const record);
