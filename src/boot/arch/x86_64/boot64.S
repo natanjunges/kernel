@@ -229,7 +229,7 @@ fill_idt:
     movl %eax, 8(%rbx, %rcx, 8)
     movl $0, 12(%rbx, %rcx, 8)
     add $2, %rcx
-    cmp $32, %rcx
+    cmp $448, %rcx
     jne .int_loop
     ret
 
