@@ -55,9 +55,9 @@ framebuffer_tag_start:
     .word MULTIBOOT2_HEADER_TAG_TYPE_FRAMEBUFFER
     .word 0
     .long framebuffer_tag_end - framebuffer_tag_start
-    .long 0
-    .long 0
-    .long 0
+    .long FRAMEBUFFER_WIDTH
+    .long FRAMEBUFFER_HEIGHT
+    .long FRAMEBUFFER_DEPTH
 framebuffer_tag_end:
 #endif/* FRAMEBUFFER*/
 
@@ -101,10 +101,10 @@ relocatable_header_tag_start:
     .word MULTIBOOT2_HEADER_TAG_TYPE_RELOCATABLE_HEADER
     .word 0
     .long relocatable_header_tag_end - relocatable_header_tag_start
-    .long 0x00100000
-    .long 0xFFFFFFFF
-    .long 4096
-    .long MULTIBOOT2_HEADER_TAG_RELOCATABLE_HEADER_PREFERENCE_NONE
+    .long RELOCATABLE_HEADER_MIN_ADDR
+    .long RELOCATABLE_HEADER_MAX_ADDR
+    .long RELOCATABLE_HEADER_ALIGN
+    .long RELOCATABLE_HEADER_PREFERENCE
 relocatable_header_tag_end:
 #endif/* RELOCATABLE_HEADER*/
 
