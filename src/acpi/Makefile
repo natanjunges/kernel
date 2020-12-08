@@ -27,5 +27,5 @@ c_object_files := $(patsubst $(PWD)/%.c, \
 all: $(c_object_files)
 
 $(BUILD)/acpi/%.o: $(PWD)/%.c
-	mkdir -p $(shell dirname $@)
+	@mkdir -p $(shell dirname $@)
 	$(XCC) -ffreestanding -mcmodel=large -mno-red-zone -mno-mmx -mno-sse -mno-sse2 -I$(INC) -c $< -o $@

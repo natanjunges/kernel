@@ -30,9 +30,9 @@ c_object_files := $(patsubst $(PWD)/%.c, \
 all: $(assembly_object_files) $(c_object_files)
 
 $(BUILD)/boot/arch/$(TARGET)/%.o: $(PWD)/arch/$(TARGET)/%.S $(INC)/config.h
-	mkdir -p $(shell dirname $@)
+	@mkdir -p $(shell dirname $@)
 	$(XCC) -ffreestanding -I$(INC) -c $< -o $@
 
 $(BUILD)/boot/%.o: $(PWD)/%.c
-	mkdir -p $(shell dirname $@)
+	@mkdir -p $(shell dirname $@)
 	$(XCC) -ffreestanding -mcmodel=large -mno-red-zone -mno-mmx -mno-sse -mno-sse2 -I$(INC) -c $< -o $@

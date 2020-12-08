@@ -26,26 +26,25 @@ grub_cfg := $(PWD)/src/boot/grub.cfg
 binary := $(BUILD)/kernel-$(TARGET).elf
 iso := $(BUILD)/kernel-$(TARGET).iso
 
-.PHONY: all iso run clean kernel $(SUBMAKES)
+.PHONY: all iso run clean $(SUBMAKES)
 
-all: kernel
+all: $(SUBMAKES)
+	@$(MAKE) $(binary)
 
-iso: kernel $(iso)
+iso: all
+	@$(MAKE) $(iso)
 
-run: kernel $(iso)
+run:
 	$(QEMU) -bios OVMF.fd -cdrom $(iso)
 
 clean:
 	@rm -r $(BUILD)
 
-kernel: $(SUBMAKES)
-	make $(binary)
-
 $(SUBMAKES):
-	make -C $(PWD)/src/$@ all TARGET=$(TARGET) XCC=$(XCC) XLD=$(XLD) QEMU=$(QEMU) INC=$(INC) BUILD=$(BUILD)
+	@$(MAKE) -C $(PWD)/src/$@ all TARGET=$(TARGET) XCC=$(XCC) XLD=$(XLD) QEMU=$(QEMU) INC=$(INC) BUILD=$(BUILD)
 
-$(binary): $(linker_ld) $(shell find $(BUILD) -name *.o)
-	$(XLD) -n -T $(linker_ld) $(shell find $(BUILD) -name *.o) -o $@
+$(binary): $(linker_ld) $(shell mkdir -p $(BUILD) && find $(BUILD) -name *.o)
+	$(XLD) -n -T $^ -o $@
 
 $(iso): $(binary) $(grub_cfg)
 	mkdir -p $(BUILD)/isofiles/boot/grub/
