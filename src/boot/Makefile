@@ -35,4 +35,4 @@ $(BUILD)/boot/arch/$(TARGET)/%.o: $(PWD)/arch/$(TARGET)/%.S $(INC)/config.h
 
 $(BUILD)/boot/%.o: $(PWD)/%.c
 	@mkdir -p $(shell dirname $@)
-	$(XCC) -ffreestanding -mcmodel=large -mno-red-zone -mno-mmx -mno-sse -mno-sse2 -I$(INC) -c $< -o $@
+	$(XCC) -ffreestanding -mcmodel=large -mno-red-zone -mno-mmx -mno-sse -mno-sse2 -Wall -Wextra -Werror -I$(INC) -c $< -o $@

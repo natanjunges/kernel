@@ -12,8 +12,7 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License. */
 
-#ifndef BOOT64_H
-#define BOOT64_H
+#pragma once
 
 #define PIC1_COMMAND 0x20
 #define PIC2_COMMAND 0xA0
@@ -39,5 +38,3 @@ limitations under the License. */
 #define IDT_PRESENT (1 << 7)
 #define IDT_GATE_TYPE_INTERRUPT 0xE
 #define IDT_GATE_TYPE_TRAP 0xF
-
-#endif/* !BOOT64_H*/

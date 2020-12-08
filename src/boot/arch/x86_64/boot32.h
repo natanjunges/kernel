@@ -12,8 +12,7 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License. */
 
-#ifndef BOOT32_H
-#define BOOT32_H
+#pragma once
 
 #define GDT_EXECUTABLE (1 << 43)
 #define GDT_DESCRIPTOR_TYPE (1 << 44)
@@ -36,5 +35,3 @@ limitations under the License. */
 #define MSR_IA32_EFER_LME (1 << 8)
 
 #define CR0_PG (1 << 31)
-
-#endif/* !BOOT32_H*/

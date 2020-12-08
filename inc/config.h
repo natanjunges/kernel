@@ -12,8 +12,7 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License. */
 
-#ifndef CONFIG_H
-#define CONFIG_H
+#pragma once
 
 #include <multiboot2.h>
 
@@ -39,5 +38,3 @@ limitations under the License. */
 #endif/* RELOCATABLE_HEADER*/
 
 #define STACK_SIZE 0x4000
-
-#endif/* !CONFIG_H*/

@@ -12,8 +12,7 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License. */
 
-#ifndef MULTIBOOT2_H
-#define MULTIBOOT2_H
+#pragma once
 
 #define MULTIBOOT2_HEADER_MAGIC 0xE85250D6
 
@@ -55,5 +54,3 @@ limitations under the License. */
 #define MBI_TAG_TYPE_EFI_32_BIT_IMAGE_HANDLE_POINTER 19
 #define MBI_TAG_TYPE_EFI_64_BIT_IMAGE_HANDLE_POINTER 20
 #define MBI_TAG_TYPE_IMAGE_LOAD_BASE_PHYSICAL_ADDRESS 21
-
-#endif/* !MULTIBOOT2_H*/

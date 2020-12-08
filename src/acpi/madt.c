@@ -15,13 +15,13 @@ limitations under the License. */
 #include <stdint.h>
 #include <acpi/madt.h>
 
-struct acpi_madt_record * acpi_madt_nextRecord(struct acpi_madt * self, struct acpi_madt_record * record) {
+const struct acpi_madt_record * acpi_madt_nextRecord(const struct acpi_madt * const self, const struct acpi_madt_record * const record) {
     if (self == 0 || record == 0 || record < self->records || (uintptr_t)record >= (uintptr_t)self + self->header.length) {
         return 0;
     }
 
-    struct acpi_madt_record * ret = record;
-    ret = (struct acpi_madt_record *)((uintptr_t)ret + ret->length);
+    const struct acpi_madt_record * ret = record;
+    ret = (const struct acpi_madt_record *)((uintptr_t)ret + ret->length);
 
     if ((uintptr_t)ret >= (uintptr_t)self + self->header.length) {
         return 0;
