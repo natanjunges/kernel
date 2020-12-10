@@ -14,7 +14,7 @@ limitations under the License. */
 
 #include "boot64.h"
 
-.extern main, stack, .gdt64_code, interrupt_handlers
+.extern main, stack, .gdt64_code, interrupt_handlers, lapic_address
 
 .global efi64, start64
 
@@ -141,6 +141,10 @@ interrupt_handler:
     mov $interrupt_handlers, %rbx
     mov (%rbx, %rcx, 8), %rax
     call *%rax
+    mov $LAPIC_EOI, %eax
+    mov (lapic_address), %ebx
+    mov $LAPIC_EOI_REG, %ecx
+    mov %eax, (%ebx, %ecx, 1)
     pop %r15
     pop %r14
     pop %r13

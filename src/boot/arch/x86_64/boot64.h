@@ -33,7 +33,8 @@ limitations under the License. */
 #define PIC1_MASK_ALL 0xFB
 #define PIC2_MASK_ALL 0xFF
 
-#define PIC_EOI 0x20
+#define LAPIC_EOI 0
+#define LAPIC_EOI_REG 0xB0
 
 #define IDT_PRESENT (1 << 7)
 #define IDT_GATE_TYPE_INTERRUPT 0xE

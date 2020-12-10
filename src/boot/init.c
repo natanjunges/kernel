@@ -17,6 +17,7 @@ limitations under the License. */
 #include <multiboot2_mbi.h>
 
 void(*interrupt_handlers[256])(uint8_t vector, uint64_t error);
+uint32_t lapic_address;
 
 void main(const uint32_t magic, const struct mbi_header * const mbi) {
     if (magic != MULTIBOOT2_MAGIC || mbi == 0) {
