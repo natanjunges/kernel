@@ -44,7 +44,7 @@ $(SUBMAKES):
 	@$(MAKE) -C $(PWD)/src/$@ all TARGET=$(TARGET) XCC=$(XCC) XLD=$(XLD) QEMU=$(QEMU) INC=$(INC) BUILD=$(BUILD)
 
 $(binary): $(linker_ld) $(shell mkdir -p $(BUILD) && find $(BUILD) -name *.o)
-	$(XLD) -n -T $^ -o $@
+	$(XLD) -n --strip-all -T $^ -o $@
 
 $(iso): $(binary) $(grub_cfg)
 	mkdir -p $(BUILD)/isofiles/boot/grub/

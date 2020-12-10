@@ -14,7 +14,7 @@ limitations under the License. */
 
 #include "boot64.h"
 
-.extern main, stack, .gdt64_code
+.extern main, stack, .gdt64_code, interrupt_handlers
 
 .global efi64, start64
 
@@ -94,161 +94,39 @@ disable_pic:
     out %al, $PIC2_DATA
     ret
 
+.macro IDT64_FILL_ENTRY vector
+    mov $\vector, %rcx
+    shl $1, %rcx
+    mov $irq_\vector, %rax
+    movw %ax, (%rbx, %rcx, 8)
+    shr $16, %rax
+    movw %ax, 6(%rbx, %rcx, 8)
+    shr $16, %rax
+    movl %eax, 8(%rbx, %rcx, 8)
+.endm
+
 fill_idt:
-    mov $0, %rcx
     mov $idt64, %rbx
-.exc_loop_1:
-    mov $exception_handler, %rax
-    movw %ax, (%rbx, %rcx, 8)
-    movw $.gdt64_code, 2(%rbx, %rcx, 8)
-    movb $0, 4(%rbx, %rcx, 8)
-    movb $(IDT_PRESENT | IDT_GATE_TYPE_TRAP), 5(%rbx, %rcx, 8)
-    shr $16, %rax
-    movw %ax, 6(%rbx, %rcx, 8)
-    shr $16, %rax
-    movl %eax, 8(%rbx, %rcx, 8)
-    movl $0, 12(%rbx, %rcx, 8)
-    add $2, %rcx
-    cmp $16, %rcx
-    jne .exc_loop_1
-    mov $exception_error_handler, %rax
-    movw %ax, (%rbx, %rcx, 8)
-    movw $.gdt64_code, 2(%rbx, %rcx, 8)
-    movb $0, 4(%rbx, %rcx, 8)
-    movb $(IDT_PRESENT | IDT_GATE_TYPE_TRAP), 5(%rbx, %rcx, 8)
-    shr $16, %rax
-    movw %ax, 6(%rbx, %rcx, 8)
-    shr $16, %rax
-    movl %eax, 8(%rbx, %rcx, 8)
-    movl $0, 12(%rbx, %rcx, 8)
-    add $2, %rcx
-    mov $exception_handler, %rax
-    movw %ax, (%rbx, %rcx, 8)
-    movw $.gdt64_code, 2(%rbx, %rcx, 8)
-    movb $0, 4(%rbx, %rcx, 8)
-    movb $(IDT_PRESENT | IDT_GATE_TYPE_TRAP), 5(%rbx, %rcx, 8)
-    shr $16, %rax
-    movw %ax, 6(%rbx, %rcx, 8)
-    shr $16, %rax
-    movl %eax, 8(%rbx, %rcx, 8)
-    movl $0, 12(%rbx, %rcx, 8)
-    add $2, %rcx
-.exc_err_loop:
-    mov $exception_error_handler, %rax
-    movw %ax, (%rbx, %rcx, 8)
-    movw $.gdt64_code, 2(%rbx, %rcx, 8)
-    movb $0, 4(%rbx, %rcx, 8)
-    movb $(IDT_PRESENT | IDT_GATE_TYPE_TRAP), 5(%rbx, %rcx, 8)
-    shr $16, %rax
-    movw %ax, 6(%rbx, %rcx, 8)
-    shr $16, %rax
-    movl %eax, 8(%rbx, %rcx, 8)
-    movl $0, 12(%rbx, %rcx, 8)
-    add $2, %rcx
-    cmp $30, %rcx
-    jne .exc_err_loop
-    mov $exception_handler, %rax
-    movw %ax, (%rbx, %rcx, 8)
-    movw $.gdt64_code, 2(%rbx, %rcx, 8)
-    movb $0, 4(%rbx, %rcx, 8)
-    movb $(IDT_PRESENT | IDT_GATE_TYPE_TRAP), 5(%rbx, %rcx, 8)
-    shr $16, %rax
-    movw %ax, 6(%rbx, %rcx, 8)
-    shr $16, %rax
-    movl %eax, 8(%rbx, %rcx, 8)
-    movl $0, 12(%rbx, %rcx, 8)
-    add $2, %rcx
-    mov $exception_handler, %rax
-    movw %ax, (%rbx, %rcx, 8)
-    movw $.gdt64_code, 2(%rbx, %rcx, 8)
-    movb $0, 4(%rbx, %rcx, 8)
-    movb $(IDT_PRESENT | IDT_GATE_TYPE_TRAP), 5(%rbx, %rcx, 8)
-    shr $16, %rax
-    movw %ax, 6(%rbx, %rcx, 8)
-    shr $16, %rax
-    movl %eax, 8(%rbx, %rcx, 8)
-    movl $0, 12(%rbx, %rcx, 8)
-    add $2, %rcx
-    mov $exception_error_handler, %rax
-    movw %ax, (%rbx, %rcx, 8)
-    movw $.gdt64_code, 2(%rbx, %rcx, 8)
-    movb $0, 4(%rbx, %rcx, 8)
-    movb $(IDT_PRESENT | IDT_GATE_TYPE_TRAP), 5(%rbx, %rcx, 8)
-    shr $16, %rax
-    movw %ax, 6(%rbx, %rcx, 8)
-    shr $16, %rax
-    movl %eax, 8(%rbx, %rcx, 8)
-    movl $0, 12(%rbx, %rcx, 8)
-    add $2, %rcx
-.exc_loop_2:
-    mov $exception_handler, %rax
-    movw %ax, (%rbx, %rcx, 8)
-    movw $.gdt64_code, 2(%rbx, %rcx, 8)
-    movb $0, 4(%rbx, %rcx, 8)
-    movb $(IDT_PRESENT | IDT_GATE_TYPE_TRAP), 5(%rbx, %rcx, 8)
-    shr $16, %rax
-    movw %ax, 6(%rbx, %rcx, 8)
-    shr $16, %rax
-    movl %eax, 8(%rbx, %rcx, 8)
-    movl $0, 12(%rbx, %rcx, 8)
-    add $2, %rcx
-    cmp $60, %rcx
-    jne .exc_loop_2
-    mov $exception_error_handler, %rax
-    movw %ax, (%rbx, %rcx, 8)
-    movw $.gdt64_code, 2(%rbx, %rcx, 8)
-    movb $0, 4(%rbx, %rcx, 8)
-    movb $(IDT_PRESENT | IDT_GATE_TYPE_TRAP), 5(%rbx, %rcx, 8)
-    shr $16, %rax
-    movw %ax, 6(%rbx, %rcx, 8)
-    shr $16, %rax
-    movl %eax, 8(%rbx, %rcx, 8)
-    movl $0, 12(%rbx, %rcx, 8)
-    add $2, %rcx
-    mov $exception_handler, %rax
-    movw %ax, (%rbx, %rcx, 8)
-    movw $.gdt64_code, 2(%rbx, %rcx, 8)
-    movb $0, 4(%rbx, %rcx, 8)
-    movb $(IDT_PRESENT | IDT_GATE_TYPE_TRAP), 5(%rbx, %rcx, 8)
-    shr $16, %rax
-    movw %ax, 6(%rbx, %rcx, 8)
-    shr $16, %rax
-    movl %eax, 8(%rbx, %rcx, 8)
-    movl $0, 12(%rbx, %rcx, 8)
-    mov $0, %rcx
-    add $512, %rbx
-.int_loop:
-    mov $interrupt_handler, %rax
-    movw %ax, (%rbx, %rcx, 8)
-    movw $.gdt64_code, 2(%rbx, %rcx, 8)
-    movb $0, 4(%rbx, %rcx, 8)
-    movb $(IDT_PRESENT | IDT_GATE_TYPE_INTERRUPT), 5(%rbx, %rcx, 8)
-    shr $16, %rax
-    movw %ax, 6(%rbx, %rcx, 8)
-    shr $16, %rax
-    movl %eax, 8(%rbx, %rcx, 8)
-    movl $0, 12(%rbx, %rcx, 8)
-    add $2, %rcx
-    cmp $448, %rcx
-    jne .int_loop
+    .altmacro
+    .set i, 0
+    .rept 256
+        IDT64_FILL_ENTRY %i
+        .set i, i + 1
+    .endr
+    .noaltmacro
     ret
-
-exception_handler:
-    iretq
-
-exception_error_handler:
-    //Pops the error code
-    add $8, %rsp
-    iretq
 
 interrupt_handler:
     cli
     push %rax
+    mov 16(%rsp), %rax
     push %rbx
+    mov 16(%rsp), %rbx
     push %rcx
     push %rdx
     push %rsi
     push %rdi
+    push %rbp
     push %r8
     push %r9
     push %r10
@@ -257,9 +135,12 @@ interrupt_handler:
     push %r13
     push %r14
     push %r15
-    mov $PIC_EOI, %al
-    out %al, $PIC2_COMMAND
-    out %al, $PIC1_COMMAND
+    mov %rbx, %rdi
+    mov %rax, %rsi
+    mov %rbx, %rcx
+    mov $interrupt_handlers, %rbx
+    mov (%rbx, %rcx, 8), %rax
+    call *%rax
     pop %r15
     pop %r14
     pop %r13
@@ -268,19 +149,144 @@ interrupt_handler:
     pop %r10
     pop %r9
     pop %r8
+    pop %rbp
     pop %rdi
     pop %rsi
     pop %rdx
     pop %rcx
     pop %rbx
     pop %rax
+    add $16, %rsp
     sti
     iretq
+
+.macro EXC_ERR_HANDLER vector
+irq_\vector:
+    push $\vector
+    jmp interrupt_handler
+.endm
+
+.macro INT_HANDLER vector
+irq_\vector:
+    push $0
+    push $\vector
+    jmp interrupt_handler
+.endm
+
+.macro EXC_NO_ERR_HANDLER vector
+INT_HANDLER \vector
+.endm
+
+EXC_NO_ERR_HANDLER 0
+
+EXC_NO_ERR_HANDLER 1
+
+EXC_NO_ERR_HANDLER 2
+
+EXC_NO_ERR_HANDLER 3
+
+EXC_NO_ERR_HANDLER 4
+
+EXC_NO_ERR_HANDLER 5
+
+EXC_NO_ERR_HANDLER 6
+
+EXC_NO_ERR_HANDLER 7
+
+EXC_ERR_HANDLER 8
+
+EXC_NO_ERR_HANDLER 9
+
+EXC_ERR_HANDLER 10
+
+EXC_ERR_HANDLER 11
+
+EXC_ERR_HANDLER 12
+
+EXC_ERR_HANDLER 13
+
+EXC_ERR_HANDLER 14
+
+EXC_NO_ERR_HANDLER 15
+
+EXC_NO_ERR_HANDLER 16
+
+EXC_ERR_HANDLER 17
+
+EXC_NO_ERR_HANDLER 18
+
+EXC_NO_ERR_HANDLER 19
+
+EXC_NO_ERR_HANDLER 20
+
+EXC_NO_ERR_HANDLER 21
+
+EXC_NO_ERR_HANDLER 22
+
+EXC_NO_ERR_HANDLER 23
+
+EXC_NO_ERR_HANDLER 24
+
+EXC_NO_ERR_HANDLER 25
+
+EXC_NO_ERR_HANDLER 26
+
+EXC_NO_ERR_HANDLER 27
+
+EXC_NO_ERR_HANDLER 28
+
+EXC_NO_ERR_HANDLER 29
+
+EXC_ERR_HANDLER 30
+
+EXC_NO_ERR_HANDLER 31
+
+.altmacro
+.set i, 32
+.rept 224
+    INT_HANDLER %i
+    .set i, i + 1
+.endr
+.noaltmacro
+
+.macro IDT64_EXC_ENTRY vector
+    .word 0
+    .word .gdt64_code
+    .byte 0
+    .byte IDT_PRESENT | IDT_GATE_TYPE_TRAP
+    .word 0
+    .long 0
+    .long 0
+.endm
+
+.macro IDT64_INT_ENTRY vector
+    .word 0
+    .word .gdt64_code
+    .byte 0
+    .byte IDT_PRESENT | IDT_GATE_TYPE_INTERRUPT
+    .word 0
+    .long 0
+    .long 0
+.endm
 
 .section .data
 idt64:
     //256 entries, 16 bytes long each
-    .space 4096
+    .altmacro
+    .set i, 0
+    .rept 32
+        IDT64_EXC_ENTRY %i
+        .set i, i + 1
+    .endr
+    .noaltmacro
+
+    .altmacro
+    .set i, 32
+    .rept 224
+        IDT64_INT_ENTRY %i
+        .set i, i + 1
+    .endr
+    .noaltmacro
 .idt64_pointer:
     .word . - idt64 - 1
     .quad idt64

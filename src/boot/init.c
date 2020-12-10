@@ -16,6 +16,8 @@ limitations under the License. */
 #include <multiboot2.h>
 #include <multiboot2_mbi.h>
 
+void(*interrupt_handlers[256])(uint8_t vector, uint64_t error);
+
 void main(const uint32_t magic, const struct mbi_header * const mbi) {
     if (magic != MULTIBOOT2_MAGIC || mbi == 0) {
         return;
