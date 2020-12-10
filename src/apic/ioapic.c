@@ -17,6 +17,9 @@ limitations under the License. */
 #include <acpi/madt.h>
 #include <apic/ioapic.h>
 
+const struct acpi_madt_record_ioapic * ioapics[256] = {0};
+const struct acpi_madt_record_iso * isos[256] = {0};
+
 void ioapic_write(volatile uint32_t * const self, const uint32_t reg, const uint32_t value) {
     if (self == 0) {
         return;
@@ -83,13 +86,11 @@ union ioapic_redirection_entry ioapic_read_redirection_entry(volatile uint32_t *
     return entry;
 }
 
-void initialize_ioapics(const struct acpi_madt * const madt) {
+void ioapic_initialize(const struct acpi_madt * const madt, const uint8_t acpi_pid) {
     if (madt == 0) {
         return;
     }
 
-    const struct acpi_madt_record_ioapic * ioapics[256] = {0};
-    const struct acpi_madt_record_iso * isos[256] = {0};
     const struct acpi_madt_record * record = madt->records;
 
     while (record != 0) {
@@ -106,29 +107,53 @@ void initialize_ioapics(const struct acpi_madt * const madt) {
 
     for (unsigned int i = 0; i < 256; i++) {
         if (ioapics[i] != 0) {
-            struct ioapic_ver ver = ioapic_read_ver((volatile uint32_t *)((uintptr_t)ioapics[i]->ioapic_address));
-            uint32_t max_gsi = ioapics[i]->gsib + ver.max_redirection_entry;
+            const struct ioapic_ver ver = ioapic_read_ver((volatile uint32_t *)((uintptr_t)ioapics[i]->ioapic_address));
 
             for (unsigned int j = 0; j <= ver.max_redirection_entry; j++) {
-                union ioapic_redirection_entry entry = ioapic_read_redirection_entry((volatile uint32_t *)((uintptr_t)ioapics[i]->ioapic_address), j);
-                entry.vector = 32 + ioapics[i]->gsib + j;
-                entry.delivery_mode = IOAPIC_REDIRECTION_ENTRY_DELIVERY_MODE_FIXED;
-                entry.destination_mode = IOAPIC_REDIRECTION_ENTRY_DESTINATION_MODE_PHYSICAL;
-                entry.pin_polarity = ACPI_MADT_RECORD_INTERRUPT_FLAGS_PIN_POLARITY_HIGH;
-                entry.trigger_mode = ACPI_MADT_RECORD_INTERRUPT_FLAGS_TRIGGER_MODE_EDGE;
-                entry.mask = IOAPIC_REDIRECTION_ENTRY_MASK_ENABLED;
-                entry.destination = 0;
+                const union ioapic_redirection_entry entry = {.mask = IOAPIC_REDIRECTION_ENTRY_MASK_DISABLED};
                 ioapic_write_redirection_entry((volatile uint32_t *)((uintptr_t)ioapics[i]->ioapic_address), j, entry);
+            }
+        }
+    }
+
+    for (unsigned int i = 0; i < 16; i++) {
+        if (i != 2) {
+            union ioapic_redirection_entry entry = {
+                .vector = 0,
+                .delivery_mode = IOAPIC_REDIRECTION_ENTRY_DELIVERY_MODE_FIXED,
+                .destination_mode = IOAPIC_REDIRECTION_ENTRY_DESTINATION_MODE_PHYSICAL,
+                .pin_polarity = ACPI_MADT_RECORD_INTERRUPT_FLAGS_PIN_POLARITY_HIGH,
+                .trigger_mode = ACPI_MADT_RECORD_INTERRUPT_FLAGS_TRIGGER_MODE_EDGE,
+                .mask = IOAPIC_REDIRECTION_ENTRY_MASK_DISABLED,
+                .destination = acpi_pid
+            };
+            uint32_t gsi = i;
+            const struct acpi_madt_record_ioapic * ioapic;
+
+            if (isos[i] != 0) {
+                gsi = isos[i]->gsi;
+
+                if (isos[i]->interrupt_flags.pin_polarity_override) {
+                    entry.pin_polarity = isos[i]->interrupt_flags.pin_polarity;
+                }
+
+                if (isos[i]->interrupt_flags.trigger_mode_override) {
+                    entry.trigger_mode = isos[i]->interrupt_flags.trigger_mode;
+                }
             }
 
             for (unsigned int j = 0; j < 256; j++) {
-                if (isos[j] != 0 && isos[j]->gsi >= ioapics[i]->gsib && isos[j]->gsi <= max_gsi) {
-                    union ioapic_redirection_entry entry = ioapic_read_redirection_entry((volatile uint32_t *)((uintptr_t)ioapics[i]->ioapic_address), isos[j]->gsi - ioapics[i]->gsib);
-                    entry.pin_polarity = isos[j]->interrupt_flags.pin_polarity;
-                    entry.trigger_mode = isos[j]->interrupt_flags.trigger_mode;
-                    ioapic_write_redirection_entry((volatile uint32_t *)((uintptr_t)ioapics[i]->ioapic_address), isos[j]->gsi - ioapics[i]->gsib, entry);
+                if (ioapics[j] != 0) {
+                    const struct ioapic_ver ver = ioapic_read_ver((volatile uint32_t *)((uintptr_t)ioapics[j]->ioapic_address));
+
+                    if (gsi >= ioapics[j]->gsib && gsi <= ioapics[j]->gsib + ver.max_redirection_entry) {
+                        ioapic = ioapics[j];
+                        break;
+                    }
                 }
             }
+
+            ioapic_write_redirection_entry((volatile uint32_t *)((uintptr_t)ioapic->ioapic_address), gsi - ioapic->gsib, entry);
         }
     }
 }

@@ -55,11 +55,11 @@ struct acpi_madt_record_ioapic {
 } __attribute__((packed));
 
 struct acpi_madt_record_interrupt_flags {
-    const uint16_t reserved0:1;
+    const uint16_t pin_polarity_override:1;
 #define ACPI_MADT_RECORD_INTERRUPT_FLAGS_PIN_POLARITY_HIGH 0
 #define ACPI_MADT_RECORD_INTERRUPT_FLAGS_PIN_POLARITY_LOW 1
     const uint16_t pin_polarity:1;
-    const uint16_t reserved1:1;
+    const uint16_t trigger_mode_override:1;
 #define ACPI_MADT_RECORD_INTERRUPT_FLAGS_TRIGGER_MODE_EDGE 0
 #define ACPI_MADT_RECORD_INTERRUPT_FLAGS_TRIGGER_MODE_LEVEL 1
     const uint16_t trigger_mode:1;

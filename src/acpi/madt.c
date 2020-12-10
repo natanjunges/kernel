@@ -20,8 +20,7 @@ const struct acpi_madt_record * acpi_madt_next_record(const struct acpi_madt * c
         return 0;
     }
 
-    const struct acpi_madt_record * ret = record;
-    ret = (const struct acpi_madt_record *)((uintptr_t)ret + ret->length);
+    const struct acpi_madt_record * const ret = (const struct acpi_madt_record *)((uintptr_t)record + record->length);
 
     if ((uintptr_t)ret >= (uintptr_t)self + self->header.length) {
         return 0;

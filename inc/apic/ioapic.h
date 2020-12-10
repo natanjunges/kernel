@@ -76,6 +76,9 @@ union ioapic_redirection_entry {
     };
 };
 
+extern const struct acpi_madt_record_ioapic * ioapics[256];
+extern const struct acpi_madt_record_iso * isos[256];
+
 /**
  * Writes value to register of the IOAPIC with the provided base address.
  *
@@ -137,8 +140,9 @@ void ioapic_write_redirection_entry(volatile uint32_t * const self, const uint8_
 union ioapic_redirection_entry ioapic_read_redirection_entry(volatile uint32_t * const self, const uint8_t n);
 
 /**
- * Goes through the MADT records and sets up the IOAPICs listed.
+ * Goes through the MADT records and sets up the IOAPICs listed, masking all interrupts and setting up the ISA IRQs.
  *
  * @param madt The ACPI MADT table.
+ * @param acpi_pid The ACPI processor ID of the main processor.
  */
-void initialize_ioapics(const struct acpi_madt * const madt);
+void ioapic_initialize(const struct acpi_madt * const madt, const uint8_t acpi_pid);
