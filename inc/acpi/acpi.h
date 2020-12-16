@@ -15,6 +15,7 @@ limitations under the License. */
 #pragma once
 
 #include <stdint.h>
+#include <types.h>
 
 struct acpi_old_rsdp {
     const char signature[8];
@@ -54,20 +55,28 @@ struct acpi_xsdt {
     const uint64_t sdt_pointers[0];
 } __attribute__((packed));
 
+DEFINE_VALUE_STATUS(acpi_sdt, const struct acpi_sdt *);
+
 /**
  * Goes through SDTs in RSDT and finds the SDT whose signature matches the provided signature.
  *
  * @param self The RSDPv1.
  * @param signature The signature of the desired SDT.
- * @return The SDT whose signature matches the provided signature, or NULL if any of the arguments is NULL or no such SDT is found.
+ * @return The SDT whose signature matches the provided signature.
+ * @throws STATUS_NULL_POINTER_ARGUMENT Any of the arguments is null.
+ * @throws STATUS_NULL_POINTER_VALUE The pointer to the RSDT is null, or a pointer to one of its SDTs is.
+ * @throws STATUS_NO_SUCH_THING No such SDT was found.
  */
-const struct acpi_sdt * acpi_old_rsdp_get_sdt(const struct acpi_old_rsdp * const self, const char signature[4]);
+VALUE_STATUS(acpi_sdt) acpi_old_rsdp_get_sdt(const struct acpi_old_rsdp * const self, const char signature[4]);
 
 /**
  * Goes through SDTs in XSDT and finds the SDT whose signature matches the provided signature.
  *
  * @param self The RSDPv2+.
  * @param signature The signature of the desired SDT.
- * @return The SDT whose signature matches the provided signature, or NULL if any of the arguments is NULL or no such SDT is found.
+ * @return The SDT whose signature matches the provided signature.
+ * @throws STATUS_NULL_POINTER_ARGUMENT Any of the arguments is null.
+ * @throws STATUS_NULL_POINTER_VALUE The pointer to the XSDT is null, or a pointer to one of its SDTs is.
+ * @throws STATUS_NO_SUCH_THING No such SDT was found.
  */
-const struct acpi_sdt * acpi_new_rsdp_get_sdt(const struct acpi_new_rsdp * const self, const char signature[4]);
+VALUE_STATUS(acpi_sdt) acpi_new_rsdp_get_sdt(const struct acpi_new_rsdp * const self, const char signature[4]);

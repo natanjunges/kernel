@@ -13,18 +13,21 @@ See the License for the specific language governing permissions and
 limitations under the License. */
 
 #include <stdint.h>
+#include <types.h>
 #include <acpi/madt.h>
 
-const struct acpi_madt_record * acpi_madt_next_record(const struct acpi_madt * const self, const struct acpi_madt_record * const record) {
-    if (self == 0 || record == 0 || record < self->records || (uintptr_t)record >= (uintptr_t)self + self->header.length) {
-        return 0;
+VALUE_STATUS(acpi_madt_record) acpi_madt_next_record(const struct acpi_madt * const self, const struct acpi_madt_record * const record) {
+    if (self == null || record == null) {
+        return (VALUE_STATUS(acpi_madt_record)){.status = STATUS_NULL_POINTER_ARGUMENT};
+    } else if (record < self->records || (uintptr_t)record >= (uintptr_t)self + self->header.length) {
+        return (VALUE_STATUS(acpi_madt_record)){.status = STATUS_ARGUMENT_OUT_OF_BOUNDS};
     }
 
     const struct acpi_madt_record * const ret = (const struct acpi_madt_record *)((uintptr_t)record + record->length);
 
-    if ((uintptr_t)ret >= (uintptr_t)self + self->header.length) {
-        return 0;
+    if (ret < self->records || (uintptr_t)ret >= (uintptr_t)self + self->header.length) {
+        return (VALUE_STATUS(acpi_madt_record)){.status = STATUS_VALUE_OUT_OF_BOUNDS};
     }
 
-    return ret;
+    return (VALUE_STATUS(acpi_madt_record)){.value = ret, .status = STATUS_OK};
 }

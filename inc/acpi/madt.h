@@ -15,6 +15,7 @@ limitations under the License. */
 #pragma once
 
 #include <stdint.h>
+#include <types.h>
 #include <acpi/acpi.h>
 
 struct acpi_madt_record {
@@ -92,11 +93,16 @@ struct acpi_madt_record_lapicao {
     const uint64_t address;
 } __attribute__((packed));
 
+DEFINE_VALUE_STATUS(acpi_madt_record, const struct acpi_madt_record *);
+
 /**
  * Finds the next record in the MADT, provided the last accessed record.
  *
  * @param self The MADT.
  * @param record The last accessed record.
- * @return The next record in the MADT, or NULL if any of the arguments is NULL, record is not inside the MADT, or if it reaches the end of MADT.
+ * @return The next record in the MADT.
+ * @throws STATUS_NULL_POINTER_ARGUMENT Any of the arguments is null.
+ * @throws STATUS_ARGUMENT_OUT_OF_BOUNDS record is not inside the MADT.
+ * @throws STATUS_VALUE_OUT_OF_BOUNDS It reached the end of MADT.
  */
-const struct acpi_madt_record * acpi_madt_next_record(const struct acpi_madt * const self, const struct acpi_madt_record * const record);
+VALUE_STATUS(acpi_madt_record) acpi_madt_next_record(const struct acpi_madt * const self, const struct acpi_madt_record * const record);

@@ -13,6 +13,7 @@ See the License for the specific language governing permissions and
 limitations under the License. */
 
 #include <stdint.h>
+#include <types.h>
 #include <multiboot2.h>
 #include <multiboot2_mbi.h>
 
@@ -20,7 +21,7 @@ void(*interrupt_handlers[256])(uint8_t vector, uint64_t error);
 uint32_t lapic_address;
 
 void main(const uint32_t magic, const struct mbi_header * const mbi) {
-    if (magic != MULTIBOOT2_MAGIC || mbi == 0) {
+    if (magic != MULTIBOOT2_MAGIC || mbi == null) {
         return;
     }
 }
